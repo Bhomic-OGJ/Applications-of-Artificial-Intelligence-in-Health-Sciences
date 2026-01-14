@@ -332,6 +332,11 @@ function setupMobileMenu() {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
     
+    if (!navToggle || !navMenu) {
+        console.error('Mobile menu elements not found');
+        return;
+    }
+    
     navToggle.addEventListener('click', () => {
         navMenu.classList.toggle('active');
         navToggle.classList.toggle('active');
@@ -343,6 +348,14 @@ function setupMobileMenu() {
             navMenu.classList.remove('active');
             navToggle.classList.remove('active');
         });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+            navMenu.classList.remove('active');
+            navToggle.classList.remove('active');
+        }
     });
 }
 
@@ -361,6 +374,9 @@ mobileMenuStyles.textContent = `
             box-shadow: var(--shadow-lg);
             transform: translateX(-100%);
             transition: transform 0.3s ease;
+            z-index: 999;
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
         }
         
         .nav-menu.active {
@@ -377,6 +393,18 @@ mobileMenuStyles.textContent = `
         
         .nav-toggle.active span:nth-child(3) {
             transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        .nav-link {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background: var(--background-alt);
+            color: var(--primary-color);
         }
     }
 `;
